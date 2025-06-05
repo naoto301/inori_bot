@@ -53,7 +53,7 @@ def handle_message(event):
 
     # ✅ プレミアム解除コード処理
     if text == "inori_2025_unlock":
-        if user_id not in premium_users:
+        if user_id and user_id not in premium_users:
             premium_users.append(user_id)
             with open(PREMIUM_FILE, "w") as f:
                 json.dump(premium_users, f)
@@ -77,13 +77,12 @@ def handle_message(event):
                 line_bot_api.reply_message(event.reply_token, messages)
                 return
             else:
-                # 第6話以降 → プレミアム判定
-                if user_id in premium_users:
+                # 第6話以降 → プレミアム判定（user_idがNoneなら非プレミアム扱い）
+                if user_id and user_id in premium_users:
                     messages = [TextSendMessage(text=msg) for msg in story_data[key]]
                     line_bot_api.reply_message(event.reply_token, messages)
                     return
                 else:
-                    # 有料誘導
                     pay_message = TextSendMessage(
                         text=(
                             "🔒 この話はプレミアム限定です。\n"
