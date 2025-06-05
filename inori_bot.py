@@ -3,7 +3,7 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 import os
-import csv
+import json
 import re
 import requests
 from dotenv import load_dotenv
@@ -21,14 +21,9 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 # GASエンドポイント
 GAS_URL = "https://script.google.com/macros/s/AKfycbwoZzyGUYV1bT2cIJDIwAHj7srg7GjbM4ifZXS1Ds3z4p6koJIsv0AB4V7ApLDos7dOXg/exec"
 
-# ストーリー読み込み
-story_data = {}
-with open("彼女は祈りを忘れた_全20話_完全版.csv", encoding="utf-8") as csvfile:
-    reader = csv.reader(csvfile)
-    next(reader)  # ヘッダー
-    for row in reader:
-        episode = row[0].replace("彼女は祈りを忘れた ", "").replace("第", "").replace("話", "")
-        story_data[episode] = row[1:6]
+# JSONファイルからストーリー読み込み
+with open("line_novel_bot_episode_data_FULL_1to20.json", encoding="utf-8") as f:
+    story_data = json.load(f)
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -74,7 +69,7 @@ def handle_message(event):
         if story_number in story_data:
             if int(story_number) > 5 and not is_premium_user(user_id):
                 pay_message = TextSendMessage(
-                    text="🔒 第6話以降はプレミアム限定です。\n\n▼解放コードはこちらで販売中\nhttps://note.com/あなたのnoteURL"
+                    text="🔒 第6話以降はプレミアム限定です。\n\nhttps://note.com/loyal_cosmos1726/n/n02affd979258"
                 )
                 line_bot_api.reply_message(event.reply_token, pay_message)
                 return
