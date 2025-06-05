@@ -24,6 +24,7 @@ GAS_URL = "https://script.google.com/macros/s/AKfycbwoZzyGUYV1bT2cIJDIwAHj7srg7G
 # JSONファイルからストーリー読み込み
 with open("line_novel_bot_episode_data_FULL_1to20.json", encoding="utf-8") as f:
     story_data = json.load(f)
+print("読み込んだ話数：", list(story_data.keys()))
 
 @app.route("/callback", methods=['POST'])
 def callback():
