@@ -67,12 +67,12 @@ def handle_message(event):
     match = re.search(r'(\d{1,2})', text)
     if match:
         story_number = match.group(1)
-        key = f"{int(story_number)}"  # ← ここが大事
+        key = f"第{int(story_number)}話"  # ← キー修正ここ！！
 
         if key in story_data:
             if int(story_number) > 5 and not is_premium_user(user_id):
                 pay_message = TextSendMessage(
-                    text="🔒 第6話以降はプレミアム限定です。\n\n▼解放コードはこちらで販売中\nhttps://note.com/あなたのnoteURL"
+                    text="🔒 第6話以降はプレミアム限定です。\n\n▼解放コードはこちらで販売中\nhttps://note.com/loyal_cosmos1726/n/n02affd979258"
                 )
                 line_bot_api.reply_message(event.reply_token, pay_message)
                 return
